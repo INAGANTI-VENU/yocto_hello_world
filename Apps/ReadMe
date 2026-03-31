@@ -1,0 +1,75 @@
+The templates are usefull to build the Linux application
+a) hello app created with the help of existing recipes-examples under meta-amd-edf layer
+  $ tree ../sources/meta-amd-edf/recipes-examples/
+  ../sources/meta-amd-edf/recipes-examples/
+  └── hello-world
+      ├── files
+      │   ├── hello-simple.c
+      │   └── Makefile
+      └── hello_2.10.bb
+
+b) myapp created by adding custom layer with the recipes-myapp
+$ tree ../sources/meta-myapps/
+  ../sources/meta-myapps/
+  ├── conf
+  │   └── layer.conf
+  ├── COPYING.MIT
+  ├── README
+  ├── recipes-apps
+  │   └── myapp
+  │       ├── files
+  │       │   ├── Makefile
+  │       │   └── myapp.c
+  │       └── myapp_1.0.bb
+  └── recipes-example
+      └── example
+          └── example_0.1.bb
+
+How to create bitbake layers to achive option b)
+bitbake-layers --help ==> provide you more details about the options
+bitbake-layers create-layer ../sources/meta-myapps
+bitbake-layers add-layer ../sources/meta-myapps
+bitbake-layers show-layers ==> to cross check that the new layer is added
+
+
+mkdir -p ../sources/meta-myapps/recipes-apps/myapp/files
+vim ../sources/meta-myapps/recipes-apps/myapp/files/myapp.c
+vim ../sources/meta-myapps/recipes-apps/myapp/files/Makefile
+vim ../sources/meta-myapps/recipes-apps/myapp/myapp_1.0.bb
+bitbake myapp
+
+make sure to add the following line in the ./build/conf/local.conf file to pack the applications in to Image
+
+IMAGE_INSTALL:append = " hello"
+IMAGE_INSTALL:append = " myapp"
+
+xxxxxxx:/tmp/venui/yocto/build $ tree conf/
+  conf/
+  ├── bblayers.conf
+  ├── conf-notes.txt
+  ├── dts
+  │   └── xlnx-versal-vck190-rev1-1
+  │       ├── cortexa72-linux.dts
+  │       ├── pl-overlay-full
+  │       │   └── pl.dtsi
+  │       ├── system-top-no-pl.dts
+  │       ├── xlnx-versal-vck190-rev1-1-microblaze-pmc.dts
+  │       └── xlnx-versal-vck190-rev1-1-microblaze-psm.dts
+  ├── local.conf
+  ├── machine
+  │   ├── include
+  │   │   └── xlnx-versal-vck190-rev1-1
+  │   │       ├── microblaze.inc
+  │   │       ├── xlnx-versal-vck190-rev1-1-microblaze-pmc-features.conf
+  │   │       ├── xlnx-versal-vck190-rev1-1-microblaze-pmc-libxil.conf
+  │   │       ├── xlnx-versal-vck190-rev1-1-microblaze-psm-features.conf
+  │   │       └── xlnx-versal-vck190-rev1-1-microblaze-psm-libxil.conf
+  │   └── xlnx-versal-vck190-rev1-1.conf
+  ├── multiconfig
+  │   ├── xlnx-versal-vck190-rev1-1-microblaze-pmc.conf
+  │   └── xlnx-versal-vck190-rev1-1-microblaze-psm.conf
+  └── templateconf.cfg
+
+Make file Tab spaces are converting in to single spaces and trobling the build so plese use the following option in vim
+: set noexpandtab
+
