@@ -1,0 +1,19 @@
+The following flow helps in creating a linux kernel module
+$ tree meta-my-mod/
+meta-my-mod/
+├── conf
+│   └── layer.conf
+├── COPYING.MIT
+├── README
+├── recipes-example
+│   └── example
+│       └── example_0.1.bb
+└── recipes-kernel
+    └── my-mod
+        ├── files
+        │   ├── COPYING
+        │   ├── Makefile
+        │   └── mymod.c
+        └── my-mod_1.0.bb
+IMAGE_INSTALL:append = " my-mod" // "kernel-module-my-mod" #Wrong
+
